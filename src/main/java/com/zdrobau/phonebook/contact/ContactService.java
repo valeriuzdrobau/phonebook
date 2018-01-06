@@ -34,4 +34,9 @@ public class ContactService {
 
         return contactRepository.saveAndFlush(contact);
     }
+
+    @Transactional
+    public void delete(Long id){
+        contactRepository.deleteById(id);
+    }
 }

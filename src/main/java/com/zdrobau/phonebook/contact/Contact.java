@@ -1,10 +1,13 @@
 package com.zdrobau.phonebook.contact;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})//https://hibernate.atlassian.net/browse/OGM-641
 public class Contact{
 
     @Id
