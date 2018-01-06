@@ -13,3 +13,11 @@ security:
   ignored:
     - "/contacts/*"
     - "/api/*"
+app:
+  name: PhoneBook
+
+jwt:
+  header: Authorization
+  expires_in: 300 # 5 minutes
+  mobile_expires_in: 600 # 10 minutes
+  secret: springboot

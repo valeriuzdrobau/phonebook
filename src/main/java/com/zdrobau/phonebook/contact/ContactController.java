@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "contacts")
+@RequestMapping(value = "contacts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(value="contacts", description = "Data service operations on contacts", tags=("contacts"))
 public class ContactController {
 
@@ -32,7 +33,7 @@ public class ContactController {
     }
     )
     @ApiOperation(value = "View a list of available contacts", response = Contact.class, responseContainer = "List")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity findAll(){
         logger.info("All contacts:");
         List<Contact> contacts = contactService.findAll();
@@ -40,21 +41,24 @@ public class ContactController {
         return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping
     public ResponseEntity save(@RequestBody Contact contact){
         return new ResponseEntity<>(contactService.save(contact), HttpStatus.CREATED);
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Edit a existing contact", response = Contact.class)
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     public ResponseEntity edit(@RequestBody Contact contact){
         logger.info("Modify resource {}", contact.getId());
         logger.info(contact.toString());
         return new ResponseEntity<>(contactService.edit(contact), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable Long id){
         logger.info("Delete resource {}", id);
         contactService.delete(id);
