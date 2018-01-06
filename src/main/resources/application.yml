@@ -1,14 +1,15 @@
 spring:
-  datasource:
-    username:
-    password:
-    url:
-    continue-on-error: true
-    initialize: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
-    hibernate:
-      ddl-auto: create-drop
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    properties:
-         current_session_context_class: org.springframework.orm.hibernate4.SpringSessionContext
+    generate-ddl: true
+  data:
+    rest:
+      base-path: "api"
+security:
+  ignored:
+    - "/contacts/*"
+    - "/api/*"

@@ -1,41 +1,23 @@
 package com.zdrobau.phonebook.contact;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-@Table(name = "contacts")
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Contact {
+public class Contact{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contact_id")
+    @GeneratedValue
     private Long id;
 
-    @Column(name = "first_name")
-    @Max(value = 30)
     private String firstName;
 
-    @Column(name = "last_name")
-    @Max(value = 30)
     private String lastName;
 
-    @NotNull
-    private List<Character> number;
+    private String phoneNumber;
 
     public Contact() {
-    }
-
-    public Contact(String firstName, String lastName, List<Character> number) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.number = number;
     }
 
     public Long getId() {
@@ -62,12 +44,12 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public List<Character> getNumber() {
-        return number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setNumber(List<Character> number) {
-        this.number = number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -76,24 +58,7 @@ public class Contact {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", number=" + number +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Contact contact = (Contact) o;
-        return Objects.equals(id, contact.id) &&
-                Objects.equals(firstName, contact.firstName) &&
-                Objects.equals(lastName, contact.lastName) &&
-                Objects.equals(number, contact.number);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, firstName, lastName, number);
     }
 }

@@ -1,20 +1,15 @@
 package com.zdrobau.phonebook.contact;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ContactService {
-
-//    @PersistenceContext
-//    private EntityManager entityManager;
-
-    @Autowired
-    private SessionFactory sessionFactory;
 
     @Autowired
     private ContactRepository contactRepository;
@@ -24,17 +19,19 @@ public class ContactService {
         return contactRepository.findAll();
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Contact save(Contact contact){
-        return contactRepository.save(contact);
+        return contactRepository.saveAndFlush(contact);
     }
 
     @Transactional
     public Contact edit(Contact contact){
-        Contact saved = contactRepository.findOne(contact.getId());
+        Contact saved = contactRepository.getOne(contact.getId());
 
-        //computations
+        saved.setFirstName(contact.getFirstName());
+        saved.setLastName(contact.getLastName());
+        saved.setPhoneNumber(contact.getPhoneNumber());
 
-        return contactRepository.save(contact);
+        return contactRepository.saveAndFlush(contact);
     }
 }
